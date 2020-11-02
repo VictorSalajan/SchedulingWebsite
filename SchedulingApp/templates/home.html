@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %} Home {% endblock %}
+{% block content %}
+
+<button><a href="{% url 'weekly' %}">Weekly View</button></a>
+
+<h1>Today's appointments are:</h1>
+<table>
+    {% for appointment in TodayAppointments %}
+    <tr>
+        <th>Date: {{appointment.datetime}}</th>
+    </tr>
+    <tr>
+        <td>ID: {{appointment.id}}</td>
+    </tr>
+    <tr>
+        <td>Setting: {{appointment.get_setting_display}}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}

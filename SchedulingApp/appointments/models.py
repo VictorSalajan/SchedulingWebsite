@@ -14,3 +14,15 @@ class Clients(models.Model):
     price = models.IntegerField()
     receipt = models.BooleanField()
     email = models.CharField(max_length=64)
+
+class Appointments(models.Model):
+    clientID = models.ForeignKey(Clients, on_delete=models.CASCADE)
+    datetime = models.DateTimeField()
+    settings = (
+        (1, ('Face to face')),
+        (2, ('Online'))
+    )
+    setting = models.PositiveSmallIntegerField(
+        choices=settings,
+        default=1
+        )
