@@ -3,49 +3,27 @@
 
 {% block content %}
 
-<head>
-    <style>
-        .column {
-        float: left;
-        width: 50%;
-        }
-    
-        /* .row:after {
-        content: "";
-        display: table;
-        clear: both;
-        } */
-    </style>
-</head>
-
 <button><a href="{% url 'homepage' %}">Daily View</button></a><br>
 
 <h1>This week's appointments are:</h1>
-<!-- <table>
+
+{% for date in dates %}
+<div class="row">
+    <span class="col-md-1" style="background-color:turquoise;font-size:30px;">
+        {{date.0}} | {{date.1}} {{date.2}}
+    </span>
     {% for appointment in WeeklyAppointments %}
-    <tr>
-        <th>Date: {{appointment.datetime}}</th>
-    </tr>
-    <tr>
-        <td>ID: {{appointment.id}}</td>
-    </tr>
-    <tr>
-        <td>Setting: {{appointment.get_setting_display}}</td>
-    </tr>
-    {% endfor %}
-</table> -->
-
-
-<div class=".column">
-{% for appointment in WeeklyAppointments %}
-    <div class="column" style="background-color:turquoise;">
-        <h2>{{appointment.datetime}}</h2>
-        <div class=".row" style="background-color:beige;">
-            <p>ID: {{appointment.id}}</p>
-            <p>Setting: {{appointment.get_setting_display}}</p>
+        {% if appointment.datetime.day == date.2 %}
+        <div class="row" style="background-color:beige;font-size:20px">
+                ID: {{appointment.id}}
         </div>
-    </div>
-</div>
+        <div class="row" style="background-color:beige;font-size:20px">
+                Setting: {{appointment.get_setting_display}}
+        </div>
+    <br><br>
+        {% endif %}
+    {% endfor %}
 {% endfor %}
+
 
 {% endblock %}

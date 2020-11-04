@@ -67,12 +67,19 @@ def weekly(request):
     this_week_nr = date.date(year, month, day).isocalendar()[1]
     query_set = Appointments.objects.filter(datetime__week=this_week_nr)
     query_set = query_set.order_by('datetime')
-    days = []
-    for obj in query_set:
-        days.append(obj.datetime.day)
+
+    while now.isocalendar()[2]  > 1:
+        now -= date.timedelta(days=1)
+
+    day_labels = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
+    dates = []
+    for i in range(5):
+        dates.append([day_labels[i], calendar.month_name[now.month][:3], now.day])
+        now += date.timedelta(days=1)
+    
     context = {
         "WeeklyAppointments": query_set,
-        "days": days
+        "dates": dates
     }
     return render(request, 'weekly.html', context)
 
