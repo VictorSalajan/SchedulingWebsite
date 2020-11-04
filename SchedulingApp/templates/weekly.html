@@ -3,10 +3,25 @@
 
 {% block content %}
 
-<button><a href="{% url 'homepage' %}">Daily View</button></a>
+<head>
+    <style>
+        .column {
+        float: left;
+        width: 50%;
+        }
+    
+        /* .row:after {
+        content: "";
+        display: table;
+        clear: both;
+        } */
+    </style>
+</head>
+
+<button><a href="{% url 'homepage' %}">Daily View</button></a><br>
 
 <h1>This week's appointments are:</h1>
-<table>
+<!-- <table>
     {% for appointment in WeeklyAppointments %}
     <tr>
         <th>Date: {{appointment.datetime}}</th>
@@ -18,6 +33,19 @@
         <td>Setting: {{appointment.get_setting_display}}</td>
     </tr>
     {% endfor %}
-</table>
+</table> -->
+
+
+<div class=".column">
+{% for appointment in WeeklyAppointments %}
+    <div class="column" style="background-color:turquoise;">
+        <h2>{{appointment.datetime}}</h2>
+        <div class=".row" style="background-color:beige;">
+            <p>ID: {{appointment.id}}</p>
+            <p>Setting: {{appointment.get_setting_display}}</p>
+        </div>
+    </div>
+</div>
+{% endfor %}
 
 {% endblock %}

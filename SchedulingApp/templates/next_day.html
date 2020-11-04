@@ -1,12 +1,15 @@
 {% extends 'base.html' %}
-{% block title %} Home {% endblock %}
+{% block title %} Next Day {% endblock %}
 {% block content %}
 
+<button><a href="{% url 'homepage' %}">Home</button></a>
 <button><a href="{% url 'weekly' %}">Weekly View</button></a>
+
+{% if CurrentDay %}
 
 <h1>Today's appointments are:</h1>
 <table>
-    {% for appointment in TodayAppointments %}
+    {% for appointment in CurrentDay %}
     <tr>
         <th style="background-color: turquoise; font-size: large;">
             Date: {{appointment.datetime}}</th>
@@ -21,7 +24,11 @@
     {% endfor %}
 </table>
 
-<button><a href="{% url 'previous_day' %}">Previous day</button></a>
-<button><a href="{% url 'next_day' %}">Next day</button></a>
+{% else %}
+    <h1>No appointments for {{DayWithoutAppointments}}</h1>
+{% endif %}
+
+<button><a href="{% url 'previous_day' %}">Previous Day</button></a>
+<button><a href="{% url 'next_day' %}">Next Day</button></a>
 
 {% endblock %}

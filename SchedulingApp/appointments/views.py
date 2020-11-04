@@ -5,6 +5,7 @@ from appointments.models import Clients, Appointments
 from datetime import datetime
 import datetime as date
 import calendar
+from django.utils import timezone
 
 def homepage(request):
     query_set = Appointments.objects.filter(
@@ -18,6 +19,45 @@ def homepage(request):
 
     return render(request, 'home.html', context)
 
+class Change_day:
+    current_date = datetime.now()
+    
+    @staticmethod
+    def construct_query_set():
+        year = Change_day.current_date.year
+        month = Change_day.current_date.month
+        day = Change_day.current_date.day
+        query_set = Appointments.objects.filter(
+            datetime__year=year,
+            datetime__month=month,
+            datetime__day=day
+        )
+        return query_set
+
+    @staticmethod    
+    def previous_day(request):
+        Change_day.current_date -= date.timedelta(days=1)
+        month = Change_day.current_date.month
+        day = Change_day.current_date.day
+        no_appointments = f'{calendar.month_name[int(month)]} {day}'
+        context = {
+            "CurrentDay": Change_day.construct_query_set(),
+            "DayWithoutAppointments": no_appointments
+        }
+        return render(request, 'previous_day.html', context)
+
+    @staticmethod
+    def next_day(request):
+        Change_day.current_date += date.timedelta(days=1)
+        month = Change_day.current_date.month
+        day = Change_day.current_date.day
+        no_appointments = f'{calendar.month_name[int(month)]} {day}'
+        context = {
+            "CurrentDay": Change_day.construct_query_set(),
+            "DayWithoutAppointments": no_appointments
+        }
+        return render(request, 'next_day.html', context)
+
 def weekly(request):
     """ Currently not adapted for weeks that belong to two years """
     now = datetime.now()
@@ -26,8 +66,13 @@ def weekly(request):
     day = now.day
     this_week_nr = date.date(year, month, day).isocalendar()[1]
     query_set = Appointments.objects.filter(datetime__week=this_week_nr)
+    query_set = query_set.order_by('datetime')
+    days = []
+    for obj in query_set:
+        days.append(obj.datetime.day)
     context = {
-        "WeeklyAppointments": query_set
+        "WeeklyAppointments": query_set,
+        "days": days
     }
     return render(request, 'weekly.html', context)
 
