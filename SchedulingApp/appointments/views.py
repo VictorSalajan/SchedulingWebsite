@@ -7,23 +7,12 @@ import datetime as date
 import calendar
 from django.utils import timezone
 
-def homepage(request):
-    query_set = Appointments.objects.filter(
-        datetime__year=datetime.now().year,
-        datetime__month=datetime.now().month,
-        datetime__day=datetime.now().day
-    )
-    context = {
-        "TodayAppointments": query_set
-    }
-
-    return render(request, 'home.html', context)
 
 class Change_day:
     current_date = datetime.now()
-    
+
     @staticmethod
-    def construct_query_set():
+    def query_set_and_context():
         year = Change_day.current_date.year
         month = Change_day.current_date.month
         day = Change_day.current_date.day
@@ -32,31 +21,35 @@ class Change_day:
             datetime__month=month,
             datetime__day=day
         )
-        return query_set
+        month = calendar.month_name[int(Change_day.current_date.month)][:3]
+        day = Change_day.current_date.day
+        current_date = f'{month}. {day}, {Change_day.current_date.year}'
+        context = {
+            "CurrentDay": query_set,
+            "current_date": current_date
+        }
+        return context
+
+    @staticmethod
+    def homepage(request):
+        Change_day.current_date = datetime.now()
+
+        context = Change_day.query_set_and_context()
+        return render(request, 'choose_day.html', context)
 
     @staticmethod    
     def previous_day(request):
         Change_day.current_date -= date.timedelta(days=1)
-        month = Change_day.current_date.month
-        day = Change_day.current_date.day
-        no_appointments = f'{calendar.month_name[int(month)]} {day}'
-        context = {
-            "CurrentDay": Change_day.construct_query_set(),
-            "DayWithoutAppointments": no_appointments
-        }
-        return render(request, 'previous_day.html', context)
+
+        context = Change_day.query_set_and_context()
+        return render(request, 'choose_day.html', context)
 
     @staticmethod
     def next_day(request):
         Change_day.current_date += date.timedelta(days=1)
-        month = Change_day.current_date.month
-        day = Change_day.current_date.day
-        no_appointments = f'{calendar.month_name[int(month)]} {day}'
-        context = {
-            "CurrentDay": Change_day.construct_query_set(),
-            "DayWithoutAppointments": no_appointments
-        }
-        return render(request, 'next_day.html', context)
+
+        context = Change_day.query_set_and_context()
+        return render(request, 'choose_day.html', context)
 
 def weekly(request):
     """ Currently not adapted for weeks that belong to two years """

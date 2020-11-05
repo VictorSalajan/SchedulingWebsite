@@ -9,21 +9,20 @@
 
 {% for date in dates %}
 <div class="row">
-    <span class="col-md-1" style="background-color:turquoise;font-size:30px;">
+    <span class="col-md-1" style="background-color:turquoise; font-size:30px;">
         {{date.0}} | {{date.1}} {{date.2}}
     </span>
     {% for appointment in WeeklyAppointments %}
         {% if appointment.datetime.day == date.2 %}
-        <div class="row" style="background-color:beige;font-size:20px">
+        <div class="row" style="background-color:beige; font-size:20px;">
                 ID: {{appointment.id}}
         </div>
-        <div class="row" style="background-color:beige;font-size:20px">
+        <div class="row" style="background-color:beige; font-size:20px;">
                 Setting: {{appointment.get_setting_display}}
         </div>
     <br><br>
         {% endif %}
     {% endfor %}
 {% endfor %}
-
 
 {% endblock %}
