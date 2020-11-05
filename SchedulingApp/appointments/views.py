@@ -1,11 +1,10 @@
 from django.shortcuts import render
-from django.http import HttpResponse
-#from django.contrib.auth.decorators import login_required
 from appointments.models import Clients, Appointments
 from datetime import datetime
 import datetime as date
 import calendar
 from django.utils import timezone
+from django.contrib.auth.decorators import login_required
 
 
 class Change_day:
@@ -25,7 +24,7 @@ class Change_day:
         day = Change_day.current_date.day
         current_date = f'{month}. {day}, {Change_day.current_date.year}'
         context = {
-            "CurrentDay": query_set,
+            "DailyAppointments": query_set,
             "current_date": current_date
         }
         return context
@@ -37,7 +36,7 @@ class Change_day:
         context = Change_day.query_set_and_context()
         return render(request, 'choose_day.html', context)
 
-    @staticmethod    
+    @staticmethod
     def previous_day(request):
         Change_day.current_date -= date.timedelta(days=1)
 
@@ -51,6 +50,8 @@ class Change_day:
         context = Change_day.query_set_and_context()
         return render(request, 'choose_day.html', context)
 
+
+@login_required
 def weekly(request):
     """ Currently not adapted for weeks that belong to two years """
     now = datetime.now()
@@ -75,7 +76,3 @@ def weekly(request):
         "dates": dates
     }
     return render(request, 'weekly.html', context)
-
-# @login_required
-# def index(request):
-#     return render(request, 'appointments/index')

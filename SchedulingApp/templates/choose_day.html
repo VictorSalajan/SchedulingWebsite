@@ -6,11 +6,11 @@
 <button><a href="{% url 'homepage' %}">Home</button></a>
 <button><a href="{% url 'weekly' %}">Weekly View</button></a>
 
-{% if CurrentDay %}
+{% if DailyAppointments %}
 
 <h1>Appointments for {{current_date}}:</h1>
 <table>
-    {% for appointment in CurrentDay %}
+    {% for appointment in DailyAppointments %}
     <tr>
         <th style="background-color: turquoise; font-size: 30px;">
             {{appointment.datetime}}</th>
