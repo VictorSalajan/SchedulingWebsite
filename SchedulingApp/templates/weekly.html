@@ -1,29 +1,55 @@
 {% extends 'base.html' %}
 {% block title %} Weekly Appointments {% endblock %}
 
+{% if request.user.is_authenticated %}
 {% block content %}
 
+<head>
+    <style>
+        p {
+            white-space: pre-line; /* collapse WS, preserve LB */
+          }
+       </style>
+</head>
 
-<button><a href="{% url 'homepage' %}">Daily View</button></a><br>
+<button><a href="{% url 'homepage' %}">Daily View</a></button>
+<button><a href="{% url 'weekly' %}">This Week</a></button>
 
-<h1 style='text-align: center;'>This week's appointments are:</h1>
-<h2 style='text-align: center;'>({{dates.0.1}} {{dates.0.2}} - {{dates.4.1}} {{dates.4.2}})</h2>
+{% if WeeklyAppointments %}
+    <h1 style='text-align: center;'>This week's appointments are:</h1>
+    <h2 style='text-align: center;'>({{dates.0.1}} {{dates.0.2}} - {{dates.4.1}} {{dates.4.2}})
+        <button><a href="{% url 'previous_week' %}">Previous week</button></a>
+        <button><a href="{% url 'next_week' %}">Next Week</button></a><br>
+    </h2>
 
-{% for date in dates %}
-    <span class="col-md-1" style="background-color:turquoise; font-size:30px;">
-        {{date.0}} | {{date.1}} {{date.2}}
-    </span>
-    {% for appointment in WeeklyAppointments %}
-        {% if appointment.0.datetime.day == date.2 %}
-        <div class="row" style="background-color:beige; font-size:20px;">
-                
-                <p>{{appointment.1}}<br>
-                {{appointment.0.clientID.name}}<br>
-                {{appointment.0.get_setting_display}}</p>
-        </div>
-    
+    {% for date in dates %}
+        <span class="col-md-1" style="background-color:turquoise; font-size:30px;">
+            {{date.0}} | {{date.1}} {{date.2}}
+        </span>
+        {% if no_appointments %}
+            <p><br></p>
         {% endif %}
+        {% for appointment in WeeklyAppointments %}
+            {% if appointment.0.datetime.day == date.2 %}
+            <div class="row" style="background-color:beige; font-size:20px;">
+                    
+                    <p>{{appointment.1}}<br>
+                    {{appointment.0.clientID.name}}<br>
+                    {{appointment.0.get_setting_display}}</p>
+            </div>
+            <br>
+
+            {% endif %}
+        {% endfor %}
     {% endfor %}
-{% endfor %}
+{% else %}
+    <h2 style='text-align: center;'>({{dates.0.1}} {{dates.0.2}} - {{dates.4.1}} {{dates.4.2}})
+    <button><a href="{% url 'previous_week' %}">Previous week</button></a>
+    <button><a href="{% url 'next_week' %}">Next Week</button></a><br>
+{% endif %}
 
 {% endblock %}
+{% else %}
+    <p>Add logout.html</p>
+    <p><a href="{% url 'login' %}">Login HERE</a></p>
+{% endif %}
