@@ -3,24 +3,25 @@
 
 {% block content %}
 
+
 <button><a href="{% url 'homepage' %}">Daily View</button></a><br>
 
-<h1>This week's appointments are:</h1>
+<h1 style='text-align: center;'>This week's appointments are:</h1>
+<h2 style='text-align: center;'>({{dates.0.1}} {{dates.0.2}} - {{dates.4.1}} {{dates.4.2}})</h2>
 
 {% for date in dates %}
-<div class="row">
     <span class="col-md-1" style="background-color:turquoise; font-size:30px;">
         {{date.0}} | {{date.1}} {{date.2}}
     </span>
     {% for appointment in WeeklyAppointments %}
-        {% if appointment.datetime.day == date.2 %}
+        {% if appointment.0.datetime.day == date.2 %}
         <div class="row" style="background-color:beige; font-size:20px;">
-                ID: {{appointment.id}}
+                
+                <p>{{appointment.1}}<br>
+                {{appointment.0.clientID.name}}<br>
+                {{appointment.0.get_setting_display}}</p>
         </div>
-        <div class="row" style="background-color:beige; font-size:20px;">
-                Setting: {{appointment.get_setting_display}}
-        </div>
-    <br><br>
+    
         {% endif %}
     {% endfor %}
 {% endfor %}

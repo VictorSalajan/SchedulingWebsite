@@ -8,25 +8,26 @@
 
 {% if DailyAppointments %}
 
-<h1>Appointments for {{current_date}}:</h1>
+<h1>Appointments for {{week_day}}, {{current_date}}:</h1>
 <table>
     {% for appointment in DailyAppointments %}
     <tr>
         <th style="background-color: turquoise; font-size: 30px;">
-            {{appointment.datetime}}</th>
-    </tr>
-    <tr>
-        <td style="background-color: beige; font-size: 20px;">ID: {{appointment.id}}</td>
+            {{appointment.1}}</th>
     </tr>
     <tr>
         <td style="background-color: beige; font-size: 20px;">
-            Setting: {{appointment.get_setting_display}}</td>
+            {{appointment.0.clientID.name}}</td>
+    </tr>
+    <tr>
+        <td style="background-color: beige; font-size: 20px;">
+            {{appointment.0.get_setting_display}}</td>
     </tr>
     {% endfor %}
 </table>
 
 {% else %}
-    <h1>No appointments for {{current_date}}</h1>
+    <h1>No appointments for {{week_day}}, {{current_date}}</h1>
 {% endif %}
 
 <button><a href="{% url 'previous_day' %}">Previous Day</button></a>
