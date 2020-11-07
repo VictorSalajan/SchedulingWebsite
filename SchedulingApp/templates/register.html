@@ -2,6 +2,7 @@
 
 {% block title %}Create a User{% endblock %}
 
+
 {% block content %}
     <form method="POST" class="form-group">
     {% csrf_token %}
@@ -9,3 +10,5 @@
     <button type="submit" class="btn btn success">Register</button>
     </form>
 {% endblock %}
+
+

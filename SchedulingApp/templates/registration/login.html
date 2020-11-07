@@ -2,6 +2,8 @@
 
 {% block content %}
 
+<p>If you do not have an account: <a href="{% url 'register' %}">Register here</a></p>
+
 {% if form.errors %}
 <p>Your username and password didn't match. Please try again.</p>
 {% endif %}

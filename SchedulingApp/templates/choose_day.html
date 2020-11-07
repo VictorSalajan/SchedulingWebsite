@@ -4,7 +4,7 @@
 {% if user.is_authenticated %}
 {% block content %}
 
-<button><a href="{% url 'homepage' %}">Home</button></a>
+<button><a href="{% url 'daily' %}">Home</button></a>
 <button><a href="{% url 'weekly' %}">Weekly View</button></a>
 
 {% if DailyAppointments %}
@@ -18,7 +18,7 @@
     </tr>
     <tr>
         <td style="background-color: beige; font-size: 20px;">
-            {{appointment.0.clientID.name}}</td>
+            {{appointment.0.client.name}}</td>
     </tr>
     <tr>
         <td style="background-color: beige; font-size: 20px;">

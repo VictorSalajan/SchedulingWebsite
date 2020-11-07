@@ -5,7 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{% endblock %}</title>
 </head>
-<body>
+<body>{% if user.is_authenticated %}
+        <p style='text-align: right;'>
+            <span style='font-weight: bold; font-size: 20px; border-style: solid; display: inline-block;'>
+            Hello, {{user.username}}!
+            <button style='font-size: 20px;'>
+                <a href="/accounts/logout/">Logout</a>
+            </button>
+        </span><p>
+    {% endif %}
     {% block content %}
     {% endblock %}
 </body>

@@ -1,22 +1,30 @@
 from django.shortcuts import render, redirect
-from appointments.models import Clients, Appointments
+from appointments.models import Client, Appointment
 from datetime import datetime, date, timedelta, time
 import calendar
 from django.utils import timezone
-#from django.contrib.auth.decorators import login_required
-from django.contrib.auth import login, authenticate
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
+# from django.contrib.auth import login, authenticate
 
-def register(response):
-    if response.method == "POST":
-        form = UserCreationForm(response.POST)
+def register(request):
+    if request.user.is_authenticated:
+        return redirect('/daily')
+    if request.method == "POST":    #
+        form = UserCreationForm(request.POST)   #
         if form.is_valid():
             form.save()
-        return redirect('')
+        return redirect('homepage')
     else:
         form = UserCreationForm()
 
-    return render(response, 'register.html', {"form": form})
+    return render(request, 'register.html', {"form": form})     #
+
+def homepage(request):
+    if request.user.is_authenticated:
+        return redirect('/daily')
+    else:
+        return redirect('/accounts/login/')
 
 def get_query_set_and_intervals(query_set):
     """ For both daily & weekly views """
@@ -31,24 +39,28 @@ def get_query_set_and_intervals(query_set):
         query_set_and_intervals.append([obj, f'{str(start)[:5]} - {str(end)[:5]}'])
     return query_set_and_intervals
 
+
 class Change_day:
     current_date = datetime.now()
 
     @staticmethod
-    def query_set_and_context():
-        year = Change_day.current_date.year
-        month = Change_day.current_date.month
-        day = Change_day.current_date.day
-        query_set = Appointments.objects.filter(
+    def query_set_and_context(request):
+        current_date = request.session.get('current_date')
+        current_date = datetime.strptime(current_date, "%m/%d/%Y")
+        year = current_date.year
+        month = current_date.month
+        day = current_date.day
+        query_set = Appointment.objects.filter(
             datetime__year=year,
             datetime__month=month,
-            datetime__day=day
+            datetime__day=day,
+            user = request.user
         )
         current_week = date(year, month, day).isocalendar()
         week_day = calendar.day_name[current_week[2] - 1]
-        month = calendar.month_name[int(Change_day.current_date.month)][:3]
-        day = Change_day.current_date.day
-        current_date = f'{month}. {day}, {Change_day.current_date.year}'
+        month = calendar.month_name[int(current_date.month)][:3]
+        day = current_date.day
+        current_date = f'{month}. {day}, {current_date.year}'
         query_set_and_intervals = get_query_set_and_intervals(query_set)
         context = {
             "DailyAppointments": query_set_and_intervals,
@@ -58,33 +70,40 @@ class Change_day:
         return context
 
     @staticmethod
-    def homepage(request):
-        Change_day.current_date = datetime.now()
+    def daily(request):
+        current_date = datetime.now().strftime("%m/%d/%Y")
+        request.session['current_date'] = current_date
 
-        context = Change_day.query_set_and_context()
+        context = Change_day.query_set_and_context(request)
         return render(request, 'choose_day.html', context)
 
     @staticmethod
     def previous_day(request):
-        Change_day.current_date -= timedelta(days=1)
+        current_date = request.session.get('current_date', \
+            datetime.now().strftime("%m/%d/%Y"))
+        current_date = datetime.strptime(current_date, "%m/%d/%Y") - timedelta(days=1)
+        request.session['current_date'] = current_date.strftime("%m/%d/%Y")
 
-        context = Change_day.query_set_and_context()
+        context = Change_day.query_set_and_context(request)
         return render(request, 'choose_day.html', context)
 
     @staticmethod
     def next_day(request):
-        Change_day.current_date += timedelta(days=1)
+        current_date = request.session.get('current_date', \
+            datetime.now().strftime("%m/%d/%Y"))
+        current_date = datetime.strptime(current_date, "%m/%d/%Y") + timedelta(days=1)
+        request.session['current_date'] = current_date.strftime("%m/%d/%Y")
 
-        context = Change_day.query_set_and_context()
+        context = Change_day.query_set_and_context(request)
         return render(request, 'choose_day.html', context)
 
 class Change_week:
-    now = datetime.now()
+    now = datetime.now()    # store in request.session
 
     @staticmethod
     def query_set_and_context(now):
         current_week = date(now.year, now.month, now.day).isocalendar()[1]
-        query_set = Appointments.objects.filter(datetime__week=current_week)
+        query_set = Appointment.objects.filter(datetime__week=current_week)
         query_set = query_set.order_by('datetime')
 
         while now.isocalendar()[2]  > 1:
@@ -117,7 +136,7 @@ class Change_week:
     def weekly(request):
         """ Currently not adapted for weeks that belong to two years """
         Change_week.now = datetime.now()
-        now = Change_week.now
+        now = Change_week.now   #now=request.session.get(now)
         context = Change_week.query_set_and_context(now)
 
         return render(request, 'weekly.html', context)

@@ -12,7 +12,7 @@
        </style>
 </head>
 
-<button><a href="{% url 'homepage' %}">Daily View</a></button>
+<button><a href="{% url 'daily' %}">Daily View</a></button>
 <button><a href="{% url 'weekly' %}">This Week</a></button>
 
 {% if WeeklyAppointments %}
@@ -34,7 +34,7 @@
             <div class="row" style="background-color:beige; font-size:20px;">
                     
                     <p>{{appointment.1}}<br>
-                    {{appointment.0.clientID.name}}<br>
+                    {{appointment.0.client.name}}<br>
                     {{appointment.0.get_setting_display}}</p>
             </div>
             <br>
