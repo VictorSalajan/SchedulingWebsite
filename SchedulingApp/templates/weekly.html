@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 {% block title %} Weekly Appointments {% endblock %}
 
-{% if request.user.is_authenticated %}
 {% block content %}
 
 <head>
@@ -30,26 +29,25 @@
             <p><br></p>
         {% endif %}
         {% for appointment in WeeklyAppointments %}
-            {% if appointment.0.datetime.day == date.2 %}
-            <div class="row" style="background-color:beige; font-size:20px;">
-                    
-                    <p>{{appointment.1}}<br>
-                    {{appointment.0.client.name}}<br>
-                    {{appointment.0.get_setting_display}}</p>
-            </div>
-            <br>
-
+            {% if user.username == appointment.0.user.username %}
+            
+                {% if appointment.0.datetime.day == date.2 %}
+                    <div class="row" style="background-color:beige; font-size:20px;">
+                            <p>{{appointment.1}}<br>
+                            {{appointment.0.client.name}}<br>
+                            {{appointment.0.get_setting_display}}</p>
+                            {{appointment.0.user.username}}
+                    </div>
+                    <br>
+                {% endif %}
             {% endif %}
         {% endfor %}
     {% endfor %}
 {% else %}
+    <h1 style='text-align: center;'>No appointments for selected week</h1>
     <h2 style='text-align: center;'>({{dates.0.1}} {{dates.0.2}} - {{dates.4.1}} {{dates.4.2}})
     <button><a href="{% url 'previous_week' %}">Previous week</button></a>
     <button><a href="{% url 'next_week' %}">Next Week</button></a><br>
 {% endif %}
 
 {% endblock %}
-{% else %}
-    <p>Add logout.html</p>
-    <p><a href="{% url 'login' %}">Login HERE</a></p>
-{% endif %}

@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 {% block title %}{{current_date}}{% endblock %}
 
-{% if user.is_authenticated %}
 {% block content %}
 
 <button><a href="{% url 'daily' %}">Home</button></a>
@@ -36,7 +35,3 @@
 
 
 {% endblock %}
-{% else %}
-    <p>Add logout.html</p>
-    <p><a href="{% url 'login' %}">Login HERE</a></p>
-{% endif %}

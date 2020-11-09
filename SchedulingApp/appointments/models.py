@@ -1,7 +1,7 @@
 from django.db import models
 #from django.conf import settings
 from django.contrib.auth.models import User
-
+from datetime import datetime
 # Create your models here.
 
 class Client(models.Model):
@@ -13,6 +13,9 @@ class Client(models.Model):
     price = models.IntegerField()
     receipt = models.BooleanField()
     email = models.CharField(max_length=64)
+
+    def __str__(self):
+        return f'{self.name} - {self.problem}'
 
 class Appointment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -26,3 +29,8 @@ class Appointment(models.Model):
         choices=SETTINGS,
         default=1
         )
+
+    def __str__(self):
+        eventdate = self.datetime.strftime("%m/%d/%Y, %H:%M")
+        eventdate = datetime.strptime(eventdate, "%m/%d/%Y, %H:%M")
+        return f'{str(eventdate)[:-3]} - {self.client.__str__()} -- User: {self.user}'
