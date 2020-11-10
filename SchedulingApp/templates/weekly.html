@@ -7,22 +7,38 @@
     <style>
         p {
             white-space: pre-line; /* collapse WS, preserve LB */
+            text-align: left;
           }
-       </style>
+        .app_details {
+            width: 10%;
+            line-height: 1.2em;
+            font-size: 20px;
+            background: beige;
+        }
+        .week_date {
+            background: turquoise;
+            font-size: 30px;
+            font-weight: normal;
+        }
+
+    </style>
 </head>
 
-<button><a href="{% url 'daily' %}">Daily View</a></button>
-<button><a href="{% url 'weekly' %}">This Week</a></button>
+<div class="topnav">
+    <a class="active" href="{% url 'daily' %}">Daily View</a>
+    <a href="{% url 'weekly' %}">Weekly View</a>
+  </div>
 
 {% if WeeklyAppointments %}
-    <h1 style='text-align: center;'>This week's appointments are:</h1>
-    <h2 style='text-align: center;'>({{dates.0.1}} {{dates.0.2}} - {{dates.4.1}} {{dates.4.2}})
-        <button><a href="{% url 'previous_week' %}">Previous week</button></a>
-        <button><a href="{% url 'next_week' %}">Next Week</button></a><br>
+    <h1>This week's appointments are:</h1>
+    <h2>({{dates.0.1}} {{dates.0.2}} - {{dates.4.1}} {{dates.4.2}})
+        <br>
+        <a href="{% url 'previous_week' %}" class="previous">&laquo; Previous week</a>
+        <a href="{% url 'next_week' %}" class="next">Next week &raquo;</a>
     </h2>
 
     {% for date in dates %}
-        <span class="col-md-1" style="background-color:turquoise; font-size:30px;">
+        <span class='week_date'>
             {{date.0}} | {{date.1}} {{date.2}}
         </span>
         {% if no_appointments %}
@@ -31,23 +47,32 @@
         {% for appointment in WeeklyAppointments %}
             {% if user.username == appointment.0.user.username %}
             
-                {% if appointment.0.datetime.day == date.2 %}
-                    <div class="row" style="background-color:beige; font-size:20px;">
+                {% if appointment.0.event_date.day == date.2 %}
+                    <div class='app_details'>
                             <p>{{appointment.1}}<br>
                             {{appointment.0.client.name}}<br>
                             {{appointment.0.get_setting_display}}</p>
                             {{appointment.0.user.username}}
                     </div>
                     <br>
-                {% endif %}
+                {% endif %}                    
             {% endif %}
         {% endfor %}
     {% endfor %}
 {% else %}
-    <h1 style='text-align: center;'>No appointments for selected week</h1>
-    <h2 style='text-align: center;'>({{dates.0.1}} {{dates.0.2}} - {{dates.4.1}} {{dates.4.2}})
-    <button><a href="{% url 'previous_week' %}">Previous week</button></a>
-    <button><a href="{% url 'next_week' %}">Next Week</button></a><br>
+    <h1>This week's appointments are:</h1>
+    <h2>({{dates.0.1}} {{dates.0.2}} - {{dates.4.1}} {{dates.4.2}})
+        <br>
+    <a href="{% url 'previous_week' %}" class="previous">&laquo; Previous week</a>
+    <a href="{% url 'next_week' %}" class="next">Next week &raquo;</a>
+        <br>
+    {% for date in dates %}
+        <p><span class='week_date'>{{date.0}} | {{date.1}} {{date.2}}</span></p>
+        {% if no_appointments %}
+        <p><br></p>
+        {% endif %}
+    {% endfor %}
+
 {% endif %}
 
 {% endblock %}

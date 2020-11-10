@@ -30,10 +30,10 @@ def get_query_set_and_intervals(query_set):
     """ For both daily & weekly views """
     query_set_and_intervals = []
     for _, obj in enumerate(query_set):
-        start = obj.datetime.time()
+        start = obj.event_date.time()
         end = datetime.combine(
                         date.today(), 
-                        time(obj.datetime.time().hour, obj.datetime.time().minute)
+                        time(obj.event_date.time().hour, obj.event_date.time().minute)
                         ) + timedelta(minutes=50)
         end = end.time()
         query_set_and_intervals.append([obj, f'{str(start)[:5]} - {str(end)[:5]}'])
@@ -46,9 +46,9 @@ def query_set_and_context(request):
     month = current_date.month
     day = current_date.day
     query_set = Appointment.objects.filter(
-        datetime__year=year,
-        datetime__month=month,
-        datetime__day=day,
+        event_date__year=year,
+        event_date__month=month,
+        event_date__day=day,
         user = request.user
     )
     current_week = date(year, month, day).isocalendar()
@@ -95,8 +95,8 @@ def query_set_and_context_week(request):
     current_date = datetime.strptime(current_date, "%m/%d/%Y")
     current_week = date(
         current_date.year, current_date.month, current_date.day).isocalendar()[1]
-    query_set = Appointment.objects.filter(datetime__week=current_week)
-    query_set = query_set.order_by('datetime')
+    query_set = Appointment.objects.filter(event_date__week=current_week)
+    query_set = query_set.order_by('event_date')
 
     while current_date.isocalendar()[2]  > 1:
         current_date -= timedelta(days=1)
@@ -106,9 +106,9 @@ def query_set_and_context_week(request):
     no_appointments = []
     for i in range(5):
         if len(query_set.filter(
-            datetime__day=current_date.day, 
-            datetime__month=current_date.month, 
-            datetime__year=current_date.year)) == 0:
+            event_date__day=current_date.day, 
+            event_date__month=current_date.month, 
+            event_date__year=current_date.year)) == 0:
             no_appointments.append(True)
         else:
             no_appointments.append(False)

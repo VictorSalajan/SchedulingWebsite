@@ -6,21 +6,16 @@ from datetime import datetime
 
 class Client(models.Model):
     name = models.CharField(max_length=64)
-    problem = models.CharField(max_length=64)
-    notes = models.CharField(max_length=1000)
     session_number = models.IntegerField()  # to implement auto-increment in views
-    recurring = models.BooleanField()
-    price = models.IntegerField()
-    receipt = models.BooleanField()
     email = models.CharField(max_length=64)
 
     def __str__(self):
-        return f'{self.name} - {self.problem}'
+        return f'{self.name}'
 
 class Appointment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     client = models.ForeignKey(Client, on_delete=models.CASCADE)
-    datetime = models.DateTimeField()   # another name
+    event_date = models.DateTimeField()
     SETTINGS = (
         (1, ('Face to face')),
         (2, ('Online'))
@@ -29,8 +24,13 @@ class Appointment(models.Model):
         choices=SETTINGS,
         default=1
         )
+    problem = models.CharField(max_length=64, null=True, blank=True)
+    notes = models.CharField(max_length=1000, null=True, blank=True)
+    recurring = models.BooleanField(null=True, blank=True)
+    price = models.IntegerField(null=True, blank=True)
+    receipt = models.BooleanField(null=True, blank=True)
 
     def __str__(self):
-        eventdate = self.datetime.strftime("%m/%d/%Y, %H:%M")
+        eventdate = self.event_date.strftime("%m/%d/%Y, %H:%M")
         eventdate = datetime.strptime(eventdate, "%m/%d/%Y, %H:%M")
-        return f'{str(eventdate)[:-3]} - {self.client.__str__()} -- User: {self.user}'
+        return f'{str(eventdate)[:-3]} - {self.client.__str__()} - {self.problem} -- User: {self.user}'

@@ -1,10 +1,12 @@
 {% extends 'base.html' %}
-{% block title %}{{current_date}}{% endblock %}
+{% block title %}Daily Appointments{% endblock %}
 
 {% block content %}
 
-<button><a href="{% url 'daily' %}">Home</button></a>
-<button><a href="{% url 'weekly' %}">Weekly View</button></a>
+<div class="topnav">
+    <a class="active" href="{% url 'daily' %}">Daily View</a>
+    <a href="{% url 'weekly' %}">Weekly View</a>
+  </div>
 
 {% if DailyAppointments %}
 
@@ -30,8 +32,10 @@
     <h1>No appointments for {{week_day}}, {{current_date}}</h1>
 {% endif %}
 
-<button><a href="{% url 'previous_day' %}">Previous Day</button></a>
-<button><a href="{% url 'next_day' %}">Next Day</button></a>
+<!-- <button class='button'><a href="{% url 'previous_day' %}">Previous Day</button></a>
+<button class='button'><a href="{% url 'next_day' %}">Next Day</button></a> -->
 
+<a href="{% url 'previous_day' %}" class="previous">&laquo; Previous day</a>
+<a href="{% url 'next_day' %}" class="next">Next day &raquo;</a>
 
 {% endblock %}
