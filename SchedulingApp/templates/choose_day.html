@@ -3,19 +3,28 @@
 
 {% block content %}
 
+<style>
+    .container {
+        width: 50%;
+    }
+    .table-hover {
+        width: 40%;
+    }
+</style>
+
 <div class="topnav">
     <a class="active" href="{% url 'daily' %}">Daily View</a>
     <a href="{% url 'weekly' %}">Weekly View</a>
   </div>
-
+<div class='container'>
 {% if DailyAppointments %}
 
 <h1>Appointments for {{week_day}}, {{current_date}}:</h1>
-<table>
+<table class='table table-hover'>
     {% for appointment in DailyAppointments %}
     <tr>
         <th style="background-color: turquoise; font-size: 30px;">
-            {{appointment.1}}</th>
+            {{appointment.1}}<a href="{% url 'detailed_view' appointment.0.pk %}">detailed view</a></th>
     </tr>
     <tr>
         <td style="background-color: beige; font-size: 20px;">
@@ -32,10 +41,8 @@
     <h1>No appointments for {{week_day}}, {{current_date}}</h1>
 {% endif %}
 
-<!-- <button class='button'><a href="{% url 'previous_day' %}">Previous Day</button></a>
-<button class='button'><a href="{% url 'next_day' %}">Next Day</button></a> -->
-
 <a href="{% url 'previous_day' %}" class="previous">&laquo; Previous day</a>
 <a href="{% url 'next_day' %}" class="next">Next day &raquo;</a>
 
+</div>
 {% endblock %}

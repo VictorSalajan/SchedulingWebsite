@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.http import Http404
 from appointments.models import Client, Appointment
 from datetime import datetime, date, timedelta, time
 import calendar
@@ -70,6 +71,13 @@ def daily(request):
     request.session['current_date'] = current_date
 
     context = query_set_and_context(request)
+#####    
+    # request.session['daily'] = request.session.get('daily', None)
+    # try:
+    #     request.session['daily'] = [context['DailyAppointments'][0].id for el in context['DailyAppointments']]
+    # except:
+    #     pass
+#####
     return render(request, 'choose_day.html', context)
 
 @login_required
@@ -79,6 +87,13 @@ def previous_day(request):
     request.session['current_date'] = current_date.strftime("%m/%d/%Y")
 
     context = query_set_and_context(request)
+#####
+    # request.session['daily'] = request.session.get('daily', None)
+    # try:
+    #     request.session['daily'] = [context['DailyAppointments'][0].id for el in context['DailyAppointments']]
+    # except:
+    #     pass
+#####
     return render(request, 'choose_day.html', context)
 
 @login_required
@@ -88,6 +103,13 @@ def next_day(request):
     request.session['current_date'] = current_date.strftime("%m/%d/%Y")
 
     context = query_set_and_context(request)
+#####
+    # request.session['daily'] = request.session.get('daily', None)
+    # try:
+    #     request.session['daily'] = [context['DailyAppointments'][0].id for el in context['DailyAppointments']]
+    # except:
+    #     pass
+#####
     return render(request, 'choose_day.html', context)
 
 def query_set_and_context_week(request):
@@ -153,3 +175,19 @@ def next_week(request):
 
     context = query_set_and_context_week(request)
     return render(request, 'weekly.html', context)
+
+@login_required
+def detailed_view(request, pk):
+    # query_set = request.session['daily']
+    # new_query_set = []
+    # for appointment in query_set:
+    #     if appointment == request.user.id:
+    #         new_query_set.append(Appointment.id.event_date)
+    # context = {
+    #     "AppointmentDetails": new_query_set 
+    # }
+    # return render(request, 'detailed_view.html', context)
+    details = Appointment.objects.filter(pk=pk)
+
+    context = {"AppointmentDetails": details}
+    return render(request, 'detailed_view.html', context)
