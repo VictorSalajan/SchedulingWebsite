@@ -14,8 +14,21 @@
             width: 15%;
         }
         .container {
-            width: 25%;
+            width: 100%;
         }
+
+
+        .table_reverse {
+	        display: table;
+        }
+        .table_reverse tr {
+	        display: table-cell;
+        }
+        .table_reverse tr td {
+	        display: block;
+        }
+
+
     </style>
 </head>
 
@@ -28,7 +41,7 @@
 <div class="container">
     <h1 style='text-align: center;'>This week's appointments are:</h1>
     <h2 style='line-height: 0.3em; text-align: center;'>({{dates.0.1}} {{dates.0.2}} - {{dates.4.1}} {{dates.4.2}})<h2>
-    <p style='text-align: center;'>
+    <p style='text-align: center; display: inline-block; white-space: nowrap;'>
     <a href="{% url 'previous_week' %}" class="previous">&laquo; Previous week
     <a href="{% url 'next_week' %}" class="next">Next week &raquo;</a>
     </p>
@@ -55,5 +68,265 @@
     {% endfor %}
     </table>
 </div>
+
+
+
+
+
+<!-- <div class="container">
+    <h1 style='text-align: center;'>This week's appointments are:</h1>
+    <h2 style='line-height: 0.3em; text-align: center;'>({{dates.0.1}} {{dates.0.2}} - {{dates.4.1}} {{dates.4.2}})<h2>
+    <p style='text-align: center; display: inline-block; white-space: nowrap;'>
+    <a href="{% url 'previous_week' %}" class="previous">&laquo; Previous week
+    <a href="{% url 'next_week' %}" class="next">Next week &raquo;</a>
+    </p>
+    <p style='line-height: 0.5em;'><br></p>
+    <table class="table table-hover">
+    
+    <thead>
+        <tr>
+        {% for date in dates %}
+        <th>{{date.0}} | {{date.1}} {{date.2}}</th>
+        {% endfor %}
+        </tr>
+    </thead>
+
+    {% for appointment in WeeklyAppointments %}
+        {% if user.username == appointment.0.user.username %}
+                {% if appointment.0.event_date.day == dates.0.2 %}
+                <tr class='color_separator'>                
+                
+                <td>
+                    <p>current date: {{appointment.0.event_date.day}}</p>
+                <p>{{appointment.1}}</p>
+                <a href="{% url 'detailed_view' appointment.0.pk %}">detailed view</a>
+                <p>{{appointment.0.client.name}}</p>
+                <p>{{appointment.0.get_setting_display}}</p>
+                <p>{{appointment.0.user.username}}</p>
+                </td>
+                
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+
+                </tr>
+                {% endif %}
+
+                {% if appointment.0.event_date.day == dates.1.2 %}
+                <tr class='color_separator'>
+
+                <td></td>
+                
+                <td>
+                    <p>current date: {{appointment.0.event_date.day}}</p>
+                <p>{{appointment.1}}</p>
+                <a href="{% url 'detailed_view' appointment.0.pk %}">detailed view</a>
+                <p>{{appointment.0.client.name}}</p>
+                <p>{{appointment.0.get_setting_display}}</p>
+                <p>{{appointment.0.user.username}}</p>
+                </td>
+
+                <td></td>
+                <td></td>
+                <td></td>
+
+                </tr>
+                {% endif %}
+
+                {% if appointment.0.event_date.day == dates.2.2 %}
+                <tr class='color_separator'>
+                    
+                <td></td>
+                <td></td>
+                
+                <td>
+                    <p>current date: {{appointment.0.event_date.day}}</p>
+                <p>{{appointment.1}}</p>
+                <a href="{% url 'detailed_view' appointment.0.pk %}">detailed view</a>        
+                <p>{{appointment.0.client.name}}</p>
+                <p>{{appointment.0.get_setting_display}}</p>
+                <p>{{appointment.0.user.username}}</p>
+                </td>
+
+                <td></td>
+                <td></td>
+                
+                </tr>
+                {% endif %}
+
+                {% if appointment.0.event_date.day == dates.3.2 %}
+                <tr class='color_separator'>
+                
+                <td></td>
+                <td></td>
+                <td></td>
+                    
+                <td>
+                    <p>current date: {{appointment.0.event_date.day}}</p>
+                <p>{{appointment.1}}</p>
+                <a href="{% url 'detailed_view' appointment.0.pk %}">detailed view</a>
+                <p>{{appointment.0.client.name}}</p>
+                <p>{{appointment.0.get_setting_display}}</p>
+                <p>{{appointment.0.user.username}}</p>
+                </td>
+
+
+                <td></td>
+
+                </tr>
+                {% endif %}
+                
+                {% if appointment.0.event_date.day == dates.4.2 %}
+                <tr class='color_separator'>
+                    
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                
+                <td>
+                    <p>current date: {{appointment.0.event_date.day}}</p>
+                <p>{{appointment.1}}</p>
+                <a href="{% url 'detailed_view' appointment.0.pk %}">detailed view</a>    
+                <p>{{appointment.0.client.name}}</p>
+                <p>{{appointment.0.get_setting_display}}</p>
+                <p>{{appointment.0.user.username}}</p>
+                </td>
+
+                </tr>
+                {% endif %}
+        {% endif %}
+    {% endfor %}
+    </table>
+</div>
+
+
+
+
+
+
+<div class="container">
+    <h1 style='text-align: center;'>This week's appointments are:</h1>
+    <h2 style='line-height: 0.3em; text-align: center;'>({{dates.0.1}} {{dates.0.2}} - {{dates.4.1}} {{dates.4.2}})<h2>
+    <p style='text-align: center; display: inline-block; white-space: nowrap;'>
+    <a href="{% url 'previous_week' %}" class="previous">&laquo; Previous week
+    <a href="{% url 'next_week' %}" class="next">Next week &raquo;</a>
+    </p>
+    <p style='line-height: 0.5em;'><br></p>
+    <table class="table table-hover">
+    
+    <thead>
+        <tr>
+        {% for date in dates %}
+        <th>{{date.0}} | {{date.1}} {{date.2}}</th>
+        {% endfor %}
+        </tr>
+    </thead>
+
+    {% for appointment in WeeklyAppointments %}
+        {% if user.username == appointment.0.user.username %}
+                
+                <tr class='color_separator'>                
+                
+                <td>
+                    {% if appointment.0.event_date.day == dates.0.2 %}
+                    <p>current date: {{appointment.0.event_date.day}}</p>
+                <p>{{appointment.1}}</p>
+                <a href="{% url 'detailed_view' appointment.0.pk %}">detailed view</a>
+                <p>{{appointment.0.client.name}}</p>
+                <p>{{appointment.0.get_setting_display}}</p>
+                <p>{{appointment.0.user.username}}</p>
+                    {% endif %}
+                </td>
+                
+                <td>
+                    {% if appointment.0.event_date.day == dates.1.2 %}
+                    <p>current date: {{appointment.0.event_date.day}}</p>
+                <p>{{appointment.1}}</p>
+                <a href="{% url 'detailed_view' appointment.0.pk %}">detailed view</a>
+                <p>{{appointment.0.client.name}}</p>
+                <p>{{appointment.0.get_setting_display}}</p>
+                <p>{{appointment.0.user.username}}</p>
+                    {% endif %}
+                </td>
+
+                <td>
+                    {% if appointment.0.event_date.day == dates.2.2 %}
+                    <p>current date: {{appointment.0.event_date.day}}</p>
+                <p>{{appointment.1}}</p>
+                <a href="{% url 'detailed_view' appointment.0.pk %}">detailed view</a>
+                <p>{{appointment.0.client.name}}</p>
+                <p>{{appointment.0.get_setting_display}}</p>
+                <p>{{appointment.0.user.username}}</p>
+                    {% endif %}
+                </td>
+
+                <td>
+                    {% if appointment.0.event_date.day == dates.3.2 %}
+                    <p>current date: {{appointment.0.event_date.day}}</p>
+                <p>{{appointment.1}}</p>
+                <a href="{% url 'detailed_view' appointment.0.pk %}">detailed view</a>
+                <p>{{appointment.0.client.name}}</p>
+                <p>{{appointment.0.get_setting_display}}</p>
+                <p>{{appointment.0.user.username}}</p>
+                    {% endif %}
+                </td>
+
+                <td>
+                    {% if appointment.0.event_date.day == dates.4.2 %}
+                    <p>current date: {{appointment.0.event_date.day}}</p>
+                <p>{{appointment.1}}</p>
+                <a href="{% url 'detailed_view' appointment.0.pk %}">detailed view</a>
+                <p>{{appointment.0.client.name}}</p>
+                <p>{{appointment.0.get_setting_display}}</p>
+                <p>{{appointment.0.user.username}}</p>
+                    {% endif %}
+                </td>
+
+                </tr>
+
+        {% endif %}
+    {% endfor %}
+    </table>
+</div> -->
+
+
+
+<div class="container">
+    <h1 style='text-align: center;'>This week's appointments are:</h1>
+    <h2 style='line-height: 0.3em; text-align: center;'>({{dates.0.1}} {{dates.0.2}} - {{dates.4.1}} {{dates.4.2}})<h2>
+    <p style='text-align: center; display: inline-block; white-space: nowrap;'>
+    <a href="{% url 'previous_week' %}" class="previous">&laquo; Previous week
+    <a href="{% url 'next_week' %}" class="next">Next week &raquo;</a>
+    </p>
+    <p style='line-height: 0.5em;'><br></p>
+
+<table border="1" class='table_reverse'>
+    {% for date in dates %}
+    <tr>
+        <td>{{date.0}} | {{date.1}} {{date.2}}</td>
+        {% for appointment in WeeklyAppointments %}
+            {% if user.username == appointment.0.user.username %}
+                {% if appointment.0.event_date.day == date.2 %}
+                <td>
+                <p>current date: {{appointment.0.event_date.day}}</p>
+                <p>{{appointment.1}}</p>
+                <a href="{% url 'detailed_view' appointment.0.pk %}">detailed view</a>
+                <p>{{appointment.0.client.name}}</p>
+                <p>{{appointment.0.get_setting_display}}</p>
+                <p>{{appointment.0.user.username}}</p>
+                </td>
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+    </tr>
+    {% endfor %}
+    
+</table>
+</div>
+
+
+
 
 {% endblock %}

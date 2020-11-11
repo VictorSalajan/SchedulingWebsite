@@ -10,6 +10,14 @@
     .table-hover {
         width: 40%;
     }
+    th {
+        background: lightgray;
+        font-size: 30px;
+    }
+    td {
+        background: #e7e6ff;
+        font-size: 20px;
+    }
 </style>
 
 <div class="topnav">
@@ -23,17 +31,18 @@
 <table class='table table-hover'>
     {% for appointment in DailyAppointments %}
     <tr>
-        <th style="background-color: turquoise; font-size: 30px;">
+        <th>
             {{appointment.1}}<a href="{% url 'detailed_view' appointment.0.pk %}">detailed view</a></th>
     </tr>
     <tr>
-        <td style="background-color: beige; font-size: 20px;">
+        <td>
             {{appointment.0.client.name}}</td>
     </tr>
     <tr>
-        <td style="background-color: beige; font-size: 20px;">
+        <td>
             {{appointment.0.get_setting_display}}</td>
     </tr>
+    <tr><td style='background: white; line-height: 0.5em;'><br></td></tr>
     {% endfor %}
 </table>
 
