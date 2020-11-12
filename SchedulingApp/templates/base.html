@@ -74,6 +74,11 @@
                 </button>
               </p>
     {% endif %}
+    <div class="topnav">
+      <a class="active" href="{% url 'daily' %}">Daily View</a>
+      <a href="{% url 'weekly' %}">Weekly View</a>
+      <a href="{% url 'clients' %}">Clients</a>
+    </div>
     {% block content %}
     {% endblock %}
 </body>

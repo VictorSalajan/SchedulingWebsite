@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.http import Http404
+from django.http import HttpResponse, Http404
 from appointments.models import Client, Appointment
 from datetime import datetime, date, timedelta, time
 import calendar
@@ -157,7 +157,49 @@ def next_week(request):
 
 @login_required
 def detailed_view(request, pk):
-    details = Appointment.objects.filter(pk=pk)
+    appointment = Appointment.objects.filter(pk=pk)
 
-    context = {"AppointmentDetails": details}
+    context = {"appointment": appointment}
     return render(request, 'detailed_view.html', context)
+
+@login_required
+def clients(request):
+    clients = Client.objects.all()
+    last_appointments_ids = []
+    for client in clients:
+        appointments = Appointment.objects.filter(client=client)
+        last_appointment = appointments.order_by('event_date').reverse()[0]
+        last_appointment_id = last_appointment.id
+        last_appointments_ids.append(last_appointment_id)
+    last_appointments = Appointment.objects.filter(id__in=last_appointments_ids)
+    context = {
+        "clients": clients,
+        "last_appointments": last_appointments
+    }
+    return render(request, 'clients.html', context)
+
+@login_required
+def edit_appointment(request, pk):
+    query_set = Appointment.objects.filter(pk=pk)
+    if len(query_set) == 0:
+        raise Http404("Appointment not found")
+    appointment = query_set[0]
+    client = appointment.client
+    try:
+        appointment.event_date = request.POST.get("event_date", str(appointment.event_date))
+    except:
+        return HttpResponse('Please input your datetime in the following format: yyyy-mm-dd hh:mm')
+    appointment.setting = request.POST.get("setting", appointment.setting)
+    appointment.client.name = request.POST.get("name", appointment.client.name)
+    appointment.client.email = request.POST.get("email", appointment.client.email)
+    appointment.client.problem = request.POST.get("problem", appointment.client.problem)
+    appointment.notes = request.POST.get('notes', appointment.notes)
+    appointment.client.session_number = request.POST.get(
+        'session_number', appointment.client.session_number)
+    appointment.client.recurring = request.POST.get('recurring', appointment.client.recurring)
+    appointment.price = request.POST.get('price', appointment.price)
+    appointment.receipt = request.POST.get('receipt', appointment.receipt)
+
+    client.save()
+    appointment.save()
+    return render(request, 'edit_appointment.html', {"appointment": appointment})

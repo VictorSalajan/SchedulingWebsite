@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %}List of Clients{% endblock %}
+
+{% block content %}
+
+<style>
+    tr {
+        width: 50%;
+    }
+</style>
+
+{% for client in clients %}
+
+<div class='container'>
+    <table class='table table-hover'>
+<tr><td><h2>Nr: {{ forloop.counter0|add:"1" }}</h2></td></tr>
+<tr><td style='font-weight: bold;'>Name: {{ client.name }}</td></tr>
+<tr><td>Problem: {{ client.problem}}</td></tr>
+<tr><td>Session number: {{ client.session_number }}</td></tr>
+<tr><td>Recurring: {{ client.recurring }}</td></tr>
+<tr><td>Email: {{ client.email }}</td></tr>
+    </table>
+<h2>Latest appointment:</h2>
+{% for appointment in last_appointments %}
+{% if appointment.client.name == client.name %}
+    <table class='table table-hover'>
+    <tr><td>Date: {{appointment.event_date}}</td></tr>
+    <tr><td>Notes: {{appointment.notes}}</td></tr>
+    </table>
+    <table class='table table-hover'>
+    <tr>
+    <td>Setting: {{appointment.get_setting_display}}</td>
+    <td>Price: {{appointment.price}}</td>
+    <td>Receipt: {{appointment.receipt}}</td>
+    </tr>
+    </table>
+    <br>
+</div>
+{% endif %}
+{% endfor %}
+<p><br></p>
+
+{% endfor %}
+
+{% endblock %}

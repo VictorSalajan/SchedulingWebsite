@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit Appointment{% endblock %}
+
+{% block content %}
+
+<style>
+    label {
+        width: 60px;
+    }
+    p1 {
+        color: red;
+    }
+</style>
+
+<br>
+<form method="POST" action="{% url 'edit_appointment' appointment.id %}">
+    {% csrf_token %}
+    <p>
+    <label for="name">Name</label>
+    <input type="text" name="name" value="{{appointment.client.name}}">
+    <p1>* </p1>
+    </p>
+    <p>
+    <label for="name">Email</label>
+    <input type="email" name="email" value="{{appointment.client.email}}">
+    <p1>* </p1>
+    </p>
+    <p>
+    <label for="name">Datetime</label>
+    <input type="datetime" name="event_date" value="{{appointment.event_date}}">
+    <p1>* Use YYYY-MM-DD HH:MM format!</p1><br>
+    </p>
+    <p>
+    <label for="name">Setting</label>
+    <input type="text" name="setting" value="{{appointment.setting}}">
+    <p1>* 1 = 'Face to face'; 2 = 'Online'</p1><br>
+    </p>
+    <label for="name">Problem</label>
+    <input type="text" name="problem" value="{{appointment.client.problem}}"><br>
+    <label for="name">Notes</label>
+    <input type="text" name="notes" value="{{appointment.notes}}"><br>
+    <label for="name">Session number</label>
+    <input type="text" name="session_number" value="{{appointment.client.session_number}}"><br>
+    <label for="name">Recurring</label>
+    <input type="text" name="recurring" value="{{appointment.client.recurring}}"><br>
+    <label for="name">Price</label>
+    <input type="text" name="price" value="{{appointment.price}}"><br>
+    <label for="name">Receipt</label>
+    <input type="text" name="receipt" value="{{appointment.receipt}}"><br><br>
+    <p style='text-indent: 7em;'><input type="submit" value="Update"></p>
+</form>
+
+{% endblock %}

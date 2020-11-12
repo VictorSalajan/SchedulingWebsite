@@ -5,7 +5,7 @@
 
 <style>
     .container {
-        width: 50%;
+        width: 60%;
     }
     .table-hover {
         width: 40%;
@@ -20,10 +20,7 @@
     }
 </style>
 
-<div class="topnav">
-    <a class="active" href="{% url 'daily' %}">Daily View</a>
-    <a href="{% url 'weekly' %}">Weekly View</a>
-  </div>
+
 <div class='container'>
 {% if DailyAppointments %}
 
@@ -32,7 +29,9 @@
     {% for appointment in DailyAppointments %}
     <tr>
         <th>
-            {{appointment.1}}<a href="{% url 'detailed_view' appointment.0.pk %}">detailed view</a></th>
+            {{appointment.1}}<a href="{% url 'detailed_view' appointment.0.pk %}">view</a>
+            <a href="{% url 'edit_appointment' appointment.0.pk %}">edit</a>
+        </th>
     </tr>
     <tr>
         <td>

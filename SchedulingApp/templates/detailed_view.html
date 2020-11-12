@@ -10,10 +10,6 @@
     }
 </style>
 
-<div class="topnav">
-    <a class="active" href="{% url 'daily' %}">Daily View</a>
-    <a href="{% url 'weekly' %}">Weekly View</a>
-</div>
 
 
 <div class="container">
@@ -21,46 +17,46 @@
       <tbody>
         <tr>
             <td>Date:</td>
-            <td>{{AppointmentDetails.0.event_date}}</td>
+            <td>{{appointment.0.event_date}}</td>
             
         </tr>
         <tr>
             <td>Setting:</td>
-            <td>{{AppointmentDetails.0.get_setting_display}}</td>
+            <td>{{appointment.0.get_setting_display}}</td>
             
         </tr>
         <tr>
             <td>Name:</td>
-            <td>{{AppointmentDetails.0.client.name}}</td>
+            <td>{{appointment.0.client.name}}</td>
         </tr>
         <tr>
             <td>Problem:</td>
-            <td>{{AppointmentDetails.0.problem}}</td>
+            <td>{{appointment.0.client.problem}}</td>
         </tr>
         <tr>
             <td>Notes:</td>
-            <td>{{AppointmentDetails.0.notes}}</td>
+            <td>{{appointment.0.notes}}</td>
         </tr>
         <tr><td><br></td></tr>
         <tr>
             <td>Session number:</td>
-            <td>{{AppointmentDetails.0.client.session_number}}</td>
+            <td>{{appointment.0.client.session_number}}</td>
         </tr>
         <tr>
             <td>Email:</td>
-            <td>{{AppointmentDetails.0.client.email}}</td>
+            <td>{{appointment.0.client.email}}</td>
         </tr>
         <tr>
             <td>Recurring:</td>
-            <td>{{AppointmentDetails.0.recurring}}</td>
+            <td>{{appointment.0.client.recurring}}</td>
         </tr>
         <tr>
             <td>Price:</td>
-            <td>{{AppointmentDetails.0.price}}</td>
+            <td>{{appointment.0.price}}</td>
         </tr>
         <tr>
             <td>Receipt</td>
-            <td>{{AppointmentDetails.0.receipt}}</td>
+            <td>{{appointment.0.receipt}}</td>
         </tr>
       </tbody>
     </table>

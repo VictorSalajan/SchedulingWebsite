@@ -11,5 +11,7 @@ urlpatterns = [
     path('previous_week', views.previous_week, name='previous_week'),
     path('next_week', views.next_week, name='next_week'),
     path('<int:pk>/detailed_view', views.detailed_view, name='detailed_view'),
+    path('clients', views.clients, name='clients'),
+    path('<int:pk>/edit_appointment', views.edit_appointment, name='edit_appointment'),
     path('register', views.register, name='register')
 ]
