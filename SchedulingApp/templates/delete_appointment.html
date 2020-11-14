@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %}Delete Appointments{% endblock %}
+
+{% block content %}
+
+<h2>Delete Appointment</h2>
+<form method="POST" action="{% url 'delete_appointment' %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" name="Add">Delete Appointment</button>
+</form>
+
+{% endblock %}

@@ -13,6 +13,13 @@
     }
 </style>
 
+<!-- <h2>Edit Appointment</h2>
+<form method="POST" action="{% url 'edit_appointment' appointment.id %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" name="Update">Update</button>
+</form> -->
+
 <br>
 <form method="POST" action="{% url 'edit_appointment' appointment.id %}">
     {% csrf_token %}

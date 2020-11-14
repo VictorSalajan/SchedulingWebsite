@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse, Http404, HttpResponseRedirect
 from appointments.models import Client, Appointment
 from datetime import datetime, date, timedelta, time
 import calendar
@@ -7,6 +7,7 @@ from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 # from django.contrib.auth import login, authenticate
+from .forms import AddClient, AddAppointment
 
 def register(request):
     if request.user.is_authenticated:
@@ -167,11 +168,15 @@ def clients(request):
     clients = Client.objects.all()
     last_appointments_ids = []
     for client in clients:
-        appointments = Appointment.objects.filter(client=client)
-        last_appointment = appointments.order_by('event_date').reverse()[0]
-        last_appointment_id = last_appointment.id
-        last_appointments_ids.append(last_appointment_id)
+        try:
+            appointments = Appointment.objects.filter(client=client)
+            last_appointment = appointments.order_by('event_date').reverse()[0]
+            last_appointment_id = last_appointment.id
+            last_appointments_ids.append(last_appointment_id)
+        except:
+            pass
     last_appointments = Appointment.objects.filter(id__in=last_appointments_ids)
+
     context = {
         "clients": clients,
         "last_appointments": last_appointments
@@ -185,10 +190,7 @@ def edit_appointment(request, pk):
         raise Http404("Appointment not found")
     appointment = query_set[0]
     client = appointment.client
-    try:
-        appointment.event_date = request.POST.get("event_date", str(appointment.event_date))
-    except:
-        return HttpResponse('Please input your datetime in the following format: yyyy-mm-dd hh:mm')
+    appointment.event_date = request.POST.get("event_date", str(appointment.event_date))
     appointment.setting = request.POST.get("setting", appointment.setting)
     appointment.client.name = request.POST.get("name", appointment.client.name)
     appointment.client.email = request.POST.get("email", appointment.client.email)
@@ -203,3 +205,58 @@ def edit_appointment(request, pk):
     client.save()
     appointment.save()
     return render(request, 'edit_appointment.html', {"appointment": appointment})
+
+@login_required
+def add_client(response):
+    if response.method == "POST":
+        form = AddClient(response.POST)
+        if form.is_valid():
+            name = form.cleaned_data["name"]
+            problem = form.cleaned_data["problem"]
+            session_number = form.cleaned_data["session_number"]
+            recurring = form.cleaned_data["recurring"]
+            email = form.cleaned_data["email"]
+            c = Client(
+                name = name,
+                problem = problem,
+                session_number = session_number,
+                recurring = recurring,
+                email = email
+            )
+            c.save()
+        return HttpResponseRedirect("/clients")
+    else:
+        form = AddClient()
+    return render(response, 'add_client.html', {"form": form})
+
+def appointments(request):
+    return render(request, 'appointments.html', {})
+
+@login_required
+def add_appointment(response):
+    if response.method == "POST":
+        form = AddAppointment(response.POST)
+        if form.is_valid():
+            client = form.cleaned_data["client"]
+            event_date = form.cleaned_data["event_date"]
+            setting = form.cleaned_data["problem"]
+            notes = form.cleaned_data["session_number"]
+            price = form.cleaned_data["recurring"]
+            receipt = form.cleaned_data["email"]
+            a = Appointment(
+                client=client,
+                event_date=event_date,
+                setting=setting,
+                notes=notes,
+                price=price,
+                receipt=receipt
+            )
+            a.save()
+        return HttpResponseRedirect("/clients")
+    else:
+        form = AddAppointment()
+    return render(response, 'add_appointment.html', {"form": form})
+
+@login_required
+def delete_appointment(response):
+    pass
