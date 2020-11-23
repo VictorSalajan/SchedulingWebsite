@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, reverse
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 from appointments.models import Client, Appointment
 from datetime import datetime, date, timedelta, time
@@ -6,8 +6,8 @@ import calendar
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
-# from django.contrib.auth import login, authenticate
 from .forms import AddClient, AddAppointment
+
 
 def register(request):
     if request.user.is_authenticated:
@@ -186,24 +186,25 @@ def clients(request):
 @login_required
 def edit_appointment(request, pk):
     query_set = Appointment.objects.filter(pk=pk)
-    if len(query_set) == 0:
-        raise Http404("Appointment not found")
     appointment = query_set[0]
-    client = appointment.client
-    appointment.event_date = request.POST.get("event_date", str(appointment.event_date))
-    appointment.setting = request.POST.get("setting", appointment.setting)
-    appointment.client.name = request.POST.get("name", appointment.client.name)
-    appointment.client.email = request.POST.get("email", appointment.client.email)
-    appointment.client.problem = request.POST.get("problem", appointment.client.problem)
-    appointment.notes = request.POST.get('notes', appointment.notes)
-    appointment.client.session_number = request.POST.get(
-        'session_number', appointment.client.session_number)
-    appointment.client.recurring = request.POST.get('recurring', appointment.client.recurring)
-    appointment.price = request.POST.get('price', appointment.price)
-    appointment.receipt = request.POST.get('receipt', appointment.receipt)
+    if request.method == "POST":
+        client = appointment.client
+        appointment.event_date = request.POST.get("event_date", str(appointment.event_date))
+        appointment.setting = request.POST.get("setting", appointment.setting)
+        appointment.client.name = request.POST.get("name", appointment.client.name)
+        appointment.client.email = request.POST.get("email", appointment.client.email)
+        appointment.client.problem = request.POST.get("problem", appointment.client.problem)
+        appointment.notes = request.POST.get('notes', appointment.notes)
+        appointment.client.session_number = request.POST.get(
+            'session_number', appointment.client.session_number)
+        appointment.client.recurring = request.POST.get('recurring', appointment.client.recurring)
+        appointment.price = request.POST.get('price', appointment.price)
+        appointment.receipt = request.POST.get('receipt', appointment.receipt)
 
-    client.save()
-    appointment.save()
+        client.save()
+        appointment.save()
+        
+        return HttpResponseRedirect('/daily')
     return render(request, 'edit_appointment.html', {"appointment": appointment})
 
 @login_required
@@ -229,9 +230,6 @@ def add_client(response):
         form = AddClient()
     return render(response, 'add_client.html', {"form": form})
 
-def appointments(request):
-    return render(request, 'appointments.html', {})
-
 @login_required
 def add_appointment(response):
     if response.method == "POST":
@@ -255,8 +253,13 @@ def add_appointment(response):
         return HttpResponseRedirect("/clients")
     else:
         form = AddAppointment()
-    return render(response, 'add_appointment.html', {"form": form})
+        return render(response, 'add_appointment.html', {"form": form})
+
+    # try:
+    #     return render(response, 'add_appointment.html', {"form": form})
+    # except:
+    #     return HttpResponse('Not yet functional')
 
 @login_required
 def delete_appointment(response):
-    pass
+    return HttpResponse('Not yet implemented')

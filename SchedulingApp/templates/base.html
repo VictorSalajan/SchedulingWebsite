@@ -73,13 +73,14 @@
                 </a>
                 </button>
               </p>
+              <div class="topnav">
+                <a class="active" href="{% url 'daily' %}">Daily View</a>
+                <a href="{% url 'weekly' %}">Weekly View</a>
+                <a href="{% url 'clients' %}">Clients</a>
+                <a href="{% url 'add_appointment' %}">Add Appointments</a>
+              </div>
     {% endif %}
-    <div class="topnav">
-      <a class="active" href="{% url 'daily' %}">Daily View</a>
-      <a href="{% url 'weekly' %}">Weekly View</a>
-      <a href="{% url 'clients' %}">Clients</a>
-      <a href="{% url 'appointments' %}">Appointments</a>
-    </div>
+    
     {% block content %}
     {% endblock %}
 </body>

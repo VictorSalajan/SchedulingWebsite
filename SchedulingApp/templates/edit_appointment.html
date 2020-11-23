@@ -11,6 +11,9 @@
     p1 {
         color: red;
     }
+    input {
+        width: 200px;
+    }
 </style>
 
 <!-- <h2>Edit Appointment</h2>
@@ -35,8 +38,8 @@
     </p>
     <p>
     <label for="name">Datetime</label>
-    <input type="datetime" name="event_date" value="{{appointment.event_date}}">
-    <p1>* Use YYYY-MM-DD HH:MM format!</p1><br>
+    <input type="datetime-local" name="event_date" value="{{appointment.event_date}}">
+    <br>
     </p>
     <p>
     <label for="name">Setting</label>
@@ -55,7 +58,7 @@
     <input type="text" name="price" value="{{appointment.price}}"><br>
     <label for="name">Receipt</label>
     <input type="text" name="receipt" value="{{appointment.receipt}}"><br><br>
-    <p style='text-indent: 7em;'><input type="submit" value="Update"></p>
+    <p style='text-indent: 4.6em;'><input type="submit" value="Update"></p>
 </form>
 
 {% endblock %}
